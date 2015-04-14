@@ -1,0 +1,3 @@
+target/*
+!target/jira-csv-sender-1.0.jar
+!target/jira-csv-sender-1.0-tests.jar
