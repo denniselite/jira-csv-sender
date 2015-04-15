@@ -29,9 +29,7 @@ import com.atlassian.jira.bc.issue.search.SearchService;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchResults;
-import com.atlassian.mail.MailException;
-import com.atlassian.mail.MailFactory;
-import com.atlassian.mail.server.SMTPMailServer;
+import com.atlassian.mail.queue.SingleMailQueueItem;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 
 
@@ -48,20 +46,16 @@ public class CronServiceTask implements PluginJob{
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		SMTPMailServer  mailServer = MailFactory.getServerManager().getDefaultSMTPMailServer();
-		try {
-			mailServer.send(this.email);
-		} catch (MailException e) {
-			e.printStackTrace();
-		}
+		SingleMailQueueItem item = new SingleMailQueueItem(this.email);
+        ComponentAccessor.getMailQueue().addItem(item);
 		final CronServiceImpl monitor = (CronServiceImpl)jobDataMap.get(CronServiceImpl.KEY);
 		assert monitor != null;
 		monitor.setLastRun(new Date());
 	}
 	
 	private Email getEmail(List<Issue> issues) throws IOException{
-		Email email = new Email("test@email");
-		email.setFrom("test@email");
+		Email email = new Email("mail@test");
+		email.setFrom("mail@test");
 		email.setSubject("CSV Issues");
 		
 		if (issues.isEmpty()){
@@ -84,7 +78,7 @@ public class CronServiceTask implements PluginJob{
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
 			DataSource source = new FileDataSource(tmp);
 			try {
-				messageBodyPart.setDataHandler(new DataHandler(source, "multipart/mixed"));
+				messageBodyPart.setDataHandler(new DataHandler(source));
 			} catch (MessagingException e2) {
 				e2.printStackTrace();
 			}

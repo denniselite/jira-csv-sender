@@ -1,44 +1,89 @@
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
-    <plugin-info>
-        <description>${project.description}</description>
-        <version>${project.version}</version>
-        <vendor name="${project.organization.name}" url="${project.organization.url}" />
-        <param name="plugin-icon">images/pluginIcon.png</param>
-        <param name="plugin-logo">images/pluginLogo.png</param>
-    </plugin-info>
+<atlassian-plugin key="${project.groupId}.${project.artifactId}"
+	name="${project.name}" plugins-version="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<param name="plugin-icon">images/pluginIcon.png</param>
+		<param name="plugin-logo">images/pluginLogo.png</param>
+		<param name="configure.url">/plugins/jiracsvsender/configureplugin.action
+		</param>
+	</plugin-info>
 
-    <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="jira-csv-sender"/>
-    
-    <!-- add our web resources -->
-    <web-resource key="jira-csv-sender-resources" name="jira-csv-sender Web Resources">
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
-        <resource type="download" name="jira-csv-sender.css" location="/css/jira-csv-sender.css"/>
-        <resource type="download" name="jira-csv-sender.js" location="/js/jira-csv-sender.js"/>
-        <resource type="download" name="images/" location="/images"/>
+	<!-- add our i18n resource -->
+	<resource type="i18n" name="i18n" location="jira-csv-sender" />
 
-        <context>jira-csv-sender</context>
-    </web-resource>
-    
-    <!-- publish our component -->
-    <component key="myPluginComponent" class="com.atlassian.plugins.cronservices.MyPluginComponentImpl" public="true">
-        <interface>com.atlassian.plugins.cronservices.MyPluginComponent</interface>
-    </component>
-    
-    <!-- import SAL plugin scheduler -->
-    <component-import key="pluginScheduler">
-        <description>SAL Scheduler</description>
-        <interface>com.atlassian.sal.api.scheduling.PluginScheduler</interface>
-    </component-import>
-    
-    <!-- import from the product container -->
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
-    
-    <component key="schedulerComponent" class="com.atlassian.plugins.cronservices.jiracsvsender.CronServiceImpl"
-             system="true" public="true">
-        <description>Scheduler</description>
-        <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
-        <interface>com.atlassian.plugins.cronservices.jiracsvsender.CronService</interface>
-    </component>
+	<!-- add our web resources -->
+	<web-resource key="jira-csv-sender-resources" name="jira-csv-sender Web Resources">
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
+
+		<resource type="download" name="jira-csv-sender.css"
+			location="/css/jira-csv-sender.css" />
+		<resource type="download" name="jira-csv-sender.js" location="/js/jira-csv-sender.js" />
+		<resource type="download" name="images/" location="/images" />
+
+		<context>jira-csv-sender</context>
+	</web-resource>
+
+	<!-- publish our component -->
+	<component key="myPluginComponent"
+		class="com.atlassian.plugins.cronservices.MyPluginComponentImpl"
+		public="true">
+		<interface>com.atlassian.plugins.cronservices.MyPluginComponent
+		</interface>
+	</component>
+
+	<!-- import SAL plugin scheduler -->
+	<component-import key="pluginScheduler">
+		<description>SAL Scheduler</description>
+		<interface>com.atlassian.sal.api.scheduling.PluginScheduler
+		</interface>
+	</component-import>
+
+	<!-- import from the product container -->
+	<component-import key="applicationProperties"
+		interface="com.atlassian.sal.api.ApplicationProperties" />
+
+	<component key="schedulerComponent"
+		class="com.atlassian.plugins.cronservices.jiracsvsender.CronServiceImpl"
+		system="true" public="true">
+		<description>Scheduler</description>
+		<interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
+		<interface>com.atlassian.plugins.cronservices.jiracsvsender.CronService
+		</interface>
+	</component>
+
+	<component-import key="pluginSettingsFactory"
+		interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+
+	<webwork1 key="reference-actions" name="Reference WebWork Action"
+		class="java.lang.Object" roles-required="use">
+		<actions>
+			<action
+				name="com.atlassian.plugins.cronservices.webactions.JiraAdminWebAction"
+				alias="JiraAdminWebAction" roles-required="sysadmin">
+				<view name="success" type="velocity">/templates/Settings.vm</view>
+				<view name="input" type="velocity">/templates/Settings.vm</view>
+			</action>
+			<action
+				name="com.atlassian.plugins.cronservices.webactions.JiraAdminWebAction"
+				alias="JiraAdminWebAction">
+				<view name="success" type="velocity">/templates/Settings.vm</view>
+				<view name="input" type="velocity">/templates/Settings.vm</view>
+			</action>
+		</actions>
+	</webwork1>
+
+	<web-section key="example1" name="Example Section" location="system.admin" weight="105">
+		<description key="jiracsv-example">Example section in the admin page with
+			example links</description>
+		<label key="section.example.one.label" />
+	</web-section>
+	
+	<web-item key="hello_world" name="Greet world link" section="system.admin/example1" weight="20">
+        <description key="jiracsv-desc">Static link to the HelloWorld action with no name parameter.</description>
+        <label key="jira-csv-label" />
+        <link linkId="hello_world">/secure/JiraAdminWebAction!default.jspa</link>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" />
+    </web-item>
 </atlassian-plugin>

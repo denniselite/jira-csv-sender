@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Settings</title>
+</head>
+<body>
+    #if ( $action.hasActionMessages() )
+        <div class="aui-message closeable shadowed info">
+            #foreach ( $actionMessage in $action.actionMessages )
+                <p>$generalUtil.htmlEncode( $actionMessage )</p>
+            #end
+        </div>
+    #end
+    <form class="aui" name="jira-csv-sender-settings-form" method="POST" action="${req.contextPath}/secure/JiraAdminWebAction!default.jspa">
+        <h2>Settings</h2>
+        $action.email
+        <input type="text" name="email" id="email" value="$webwork.htmlEncode($email)" class="text"/>
+        <input type="text" name="interval" id="interval" value="$generalUtil.htmlEncode($interval)" class="text"/>
+        <input class="button submit" type="submit" value="Save"/>
+
+        <div class="description">Settings for Jira CSV Sender</div>
+    </form>
+</body>
+</html>
