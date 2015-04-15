@@ -1,11 +1,9 @@
 package com.atlassian.plugins.cronservices.webactions;
 
 import com.atlassian.jira.web.action.JiraWebActionSupport;
-import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.atlassian.sal.api.UrlMode;
 
-import com.atlassian.plugins.cronservices.settings.AbstractPluginSettingsManager;
+import com.atlassian.plugins.cronservices.settings.SettingsManager;
 
 public class JiraAdminWebAction extends JiraWebActionSupport{
 
@@ -14,11 +12,11 @@ public class JiraAdminWebAction extends JiraWebActionSupport{
 	private String email;
 	private String interval;
 
-	private final AbstractPluginSettingsManager settingsManager;
+	private final SettingsManager settingsManager;
 
 	public JiraAdminWebAction(PluginSettingsFactory pluginSettingsFactory){
 		super();
-		this.settingsManager = new AbstractPluginSettingsManager(pluginSettingsFactory);
+		this.settingsManager = new SettingsManager(pluginSettingsFactory);
 	}
 
 	@SuppressWarnings("unused")

@@ -16,7 +16,9 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
+import com.atlassian.plugins.cronservices.settings.SettingsManager;
 import com.atlassian.query.Query;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.scheduling.PluginJob;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.jql.builder.JqlQueryBuilder;
@@ -31,15 +33,18 @@ import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchResults;
 import com.atlassian.mail.queue.SingleMailQueueItem;
 import com.atlassian.jira.security.JiraAuthenticationContext;
-
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 
 public class CronServiceTask implements PluginJob{
 
 	public static final String MAIL = "mail";
 	private Email email;
 
-	public void execute(Map<String, Object> jobDataMap) {
+	private SettingsManager settingsManager;
 
+	public void execute(Map<String, Object> jobDataMap) {
+		final CronServiceImpl monitor = (CronServiceImpl)jobDataMap.get(CronServiceImpl.KEY);
+		this.settingsManager = monitor.getSettingsManager();
 		final List<Issue> issues = this.getIssues();
 		try {
 			this.email = this.getEmail(issues);
@@ -48,14 +53,13 @@ public class CronServiceTask implements PluginJob{
 		}
 		SingleMailQueueItem item = new SingleMailQueueItem(this.email);
         ComponentAccessor.getMailQueue().addItem(item);
-		final CronServiceImpl monitor = (CronServiceImpl)jobDataMap.get(CronServiceImpl.KEY);
 		assert monitor != null;
 		monitor.setLastRun(new Date());
 	}
 	
 	private Email getEmail(List<Issue> issues) throws IOException{
-		Email email = new Email("mail@test");
-		email.setFrom("mail@test");
+		Email email = new Email(settingsManager.getValue("email").toString());
+		email.setFrom(settingsManager.getValue("email").toString());
 		email.setSubject("CSV Issues");
 		
 		if (issues.isEmpty()){
@@ -64,8 +68,16 @@ public class CronServiceTask implements PluginJob{
 		} else {
 			email.setMimeType("multipart/mixed");
 			StringBuilder sb = new StringBuilder();
+			String csvTableHeader = "Key;Creator;Assign to;Reporter;Summary;Description\n";
+			sb.append(csvTableHeader);
 			for(Issue item:issues){
-				String str = item.getAssigneeId() + "," + item.getCreatorId() + ',' + item.getDescription();
+				String str = 
+						item.getKey() + ";" + 
+						item.getCreatorId() + ";" + 
+						item.getAssigneeId() + ";" + 
+						item.getReporterId() + ";" + 
+						item.getSummary() + ";" + 
+						item.getDescription() + "\n";
 	            sb.append(str);
 	        }
 
@@ -105,7 +117,7 @@ public class CronServiceTask implements PluginJob{
 		jac.setLoggedInUser(appUser);
 		User user = jac.getUser().getDirectoryUser();
 		final JqlQueryBuilder builder = JqlQueryBuilder.newBuilder();
-		builder.where().project("TestProject");
+		builder.where().project("TestProject").and().status("IN PROGRESS");
 		Query query = builder.buildQuery();
 		try
 		{

@@ -282,9 +282,9 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/jfree/jcommon/1.0.8/jcommon-1.0.8.jar" sourcepath="M2_REPO/jfree/jcommon/1.0.8/jcommon-1.0.8-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/atlassian/sal/sal-api/2.10.20/sal-api-2.10.20.jar" sourcepath="M2_REPO/com/atlassian/sal/sal-api/2.10.20/sal-api-2.10.20-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/com/atlassian/sal/sal-api/2.0.0/sal-api-2.0.0.jar" sourcepath="M2_REPO/com/atlassian/sal/sal-api/2.0.0/sal-api-2.0.0-sources.jar">
     <attributes>
-      <attribute value="jar:file:/C:/Users/Татьяна/.m2/repository/com/atlassian/sal/sal-api/2.10.20/sal-api-2.10.20-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/C:/Users/Татьяна/.m2/repository/com/atlassian/sal/sal-api/2.0.0/sal-api-2.0.0-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/atlassian/gadgets/atlassian-gadgets-api/3.5.7/atlassian-gadgets-api-3.5.7.jar">
@@ -346,6 +346,16 @@
   <classpathentry kind="var" path="M2_REPO/com/atlassian/upm/upm-api/2.15/upm-api-2.15.jar" sourcepath="M2_REPO/com/atlassian/upm/upm-api/2.15/upm-api-2.15-sources.jar">
     <attributes>
       <attribute value="jar:file:/C:/Users/Татьяна/.m2/repository/com/atlassian/upm/upm-api/2.15/upm-api-2.15-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/atlassian/templaterenderer/atlassian-template-renderer-api/1.1.1/atlassian-template-renderer-api-1.1.1.jar">
+    <attributes>
+      <attribute value="jar:file:/C:/Users/Татьяна/.m2/repository/com/atlassian/templaterenderer/atlassian-template-renderer-api/1.1.1/atlassian-template-renderer-api-1.1.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/google/collections/google-collections/1.0/google-collections-1.0.jar" sourcepath="M2_REPO/com/google/collections/google-collections/1.0/google-collections-1.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/C:/Users/Татьяна/.m2/repository/com/google/collections/google-collections/1.0/google-collections-1.0-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
 </classpath>

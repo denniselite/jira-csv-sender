@@ -1,6 +1,8 @@
 package com.atlassian.plugins.cronservices.jiracsvsender;
 
+import com.atlassian.plugins.cronservices.settings.SettingsManager;
 import com.atlassian.sal.api.lifecycle.LifecycleAware;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.scheduling.PluginScheduler;
 
 import java.util.Date;
@@ -12,21 +14,24 @@ public class CronServiceImpl implements CronService, LifecycleAware {
 	    private static final String JOB_NAME = CronServiceImpl.class.getName() + ":job";
 
 	    private final PluginScheduler pluginScheduler;  
+		private final SettingsManager settingsManager;    
 
-	    private long interval = 5000L;         
-	    private Date lastRun = null;        
+	    private long interval;         
+	    private Date lastRun = null;    
 
-	    public CronServiceImpl(PluginScheduler pluginScheduler) {
+	    public CronServiceImpl(PluginScheduler pluginScheduler, PluginSettingsFactory pluginSettingsFactory) {
 	        this.pluginScheduler = pluginScheduler;
+	        this.settingsManager = new SettingsManager(pluginSettingsFactory);
+	        this.interval = Long.parseLong(settingsManager.getValue("interval").toString())*60*1000;
 	    }
 
 	    public void onStart() {
-	        reschedule(interval);
+	        reschedule();
 	    }
 
-	    public void reschedule(long interval) {
-	        this.interval = interval;
-	        
+	    public void reschedule() {
+	        this.interval = Long.parseLong(settingsManager.getValue("interval").toString())*60*1000L;
+	        long interval = this.interval;
 	        pluginScheduler.scheduleJob(
 	                JOB_NAME,                   // unique name of the job
 	                CronServiceTask.class,     // class of the job
@@ -40,5 +45,9 @@ public class CronServiceImpl implements CronService, LifecycleAware {
 
 	    /* package */ void setLastRun(Date lastRun) {
 	        this.lastRun = lastRun;
+	    }
+	    
+	    public SettingsManager getSettingsManager(){
+	    	return this.settingsManager;
 	    }
 }

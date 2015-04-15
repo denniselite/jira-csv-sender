@@ -6,8 +6,7 @@
 		<vendor name="${project.organization.name}" url="${project.organization.url}" />
 		<param name="plugin-icon">images/pluginIcon.png</param>
 		<param name="plugin-logo">images/pluginLogo.png</param>
-		<param name="configure.url">/plugins/jiracsvsender/configureplugin.action
-		</param>
+		<param name="configure.url">/plugins/servlet/jiracsvsender/settings</param>
 	</plugin-info>
 
 	<!-- add our i18n resource -->
@@ -44,6 +43,10 @@
 	<component-import key="applicationProperties"
 		interface="com.atlassian.sal.api.ApplicationProperties" />
 
+	<component-import key="renderer"
+		interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+
+
 	<component key="schedulerComponent"
 		class="com.atlassian.plugins.cronservices.jiracsvsender.CronServiceImpl"
 		system="true" public="true">
@@ -56,6 +59,7 @@
 	<component-import key="pluginSettingsFactory"
 		interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
 
+	<!-- Webworks with actions -->
 	<webwork1 key="reference-actions" name="Reference WebWork Action"
 		class="java.lang.Object" roles-required="use">
 		<actions>
@@ -74,16 +78,35 @@
 		</actions>
 	</webwork1>
 
-	<web-section key="example1" name="Example Section" location="system.admin" weight="105">
-		<description key="jiracsv-example">Example section in the admin page with
-			example links</description>
-		<label key="section.example.one.label" />
+	<!-- Menu Web Section for plugin settings -->
+	
+	<web-section key="jira-csv-sender-settings" name="JIra CSV Sender"
+		location="system.admin" weight="105">
+		<description key="jiracsv-settings-section-desc">Settings section for Jira CSV Sender
+			Plugin</description>
+		<label key="jiracsv-settings-section-label" />
 	</web-section>
 	
-	<web-item key="hello_world" name="Greet world link" section="system.admin/example1" weight="20">
-        <description key="jiracsv-desc">Static link to the HelloWorld action with no name parameter.</description>
-        <label key="jira-csv-label" />
-        <link linkId="hello_world">/secure/JiraAdminWebAction!default.jspa</link>
-        <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" />
-    </web-item>
+	<!-- Link to plugin settings with servlet-->
+	<web-item key="jira-csv-sender-settings-servlet-link" name="Link to SettingsServlet"
+		section="system.admin/jira-csv-sender-settings" weight="20">
+		<description key="jiracsv-desc">Static link to the servlet</description>
+		<label key="jira-csv-label" />
+		<link linkId="hello_world">/plugins/servlet/jiracsvsender/settings</link>
+	</web-item>
+	
+	<!-- Link to plugin settings with action-->
+	<web-item key="jira-csv-sender-settings-action-link" name="Link to ActionSettings"
+		section="system.admin/jira-csv-sender-settings" weight="20">
+		<description key="jiracsv-desc">Static link to the action settings</description>
+		<label key="jira-csv-label" />
+		<link linkId="hello_world">/secure/JiraAdminWebAction!default.jspa</link>
+		<condition
+			class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" />
+	</web-item>
+
+	<!-- Settings HTTP Servlet -->
+	<servlet key="jira-csv-sender-settingsservlet" class="com.atlassian.plugins.cronservices.settings.SettingsServlet">
+		<url-pattern>/jiracsvsender/settings</url-pattern>
+	</servlet>
 </atlassian-plugin>

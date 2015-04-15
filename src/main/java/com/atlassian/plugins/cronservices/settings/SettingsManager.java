@@ -5,11 +5,11 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.util.concurrent.Nullable;
 import com.atlassian.util.concurrent.NotNull;
 
-public class AbstractPluginSettingsManager {
+public class SettingsManager {
 	
 	private final PluginSettings pluginSettings;
 	
-	public AbstractPluginSettingsManager(PluginSettingsFactory pluginSettingsFactory){
+	public SettingsManager(PluginSettingsFactory pluginSettingsFactory){
 		pluginSettings = pluginSettingsFactory.createSettingsForKey("jiracsvsender");
 	}
 	
@@ -30,7 +30,7 @@ public class AbstractPluginSettingsManager {
 		pluginSettings.put(key, value);
 	}
 	
-	@Nullable
+//	@Nullable
 	public Object getValue(@NotNull String key){
 		return pluginSettings.get(key);
 	}
