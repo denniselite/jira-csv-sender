@@ -3,6 +3,8 @@
 		<title>Settings</title>
 		<meta name="decorator" content="atl.admin">
 			$webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+			$webResourceManager.requireResource("com.atlassian.auiplugin:aui-select2")
+			$webResourceManager.requireResource("com.atlassian.plugins.cronservices.jira-csv-sender:jira-csv-sender-resources")
 	</head>
 	<body>
 		<div class="aui-group">
@@ -29,18 +31,25 @@
 					</tboby>
 				</table>
 			</div>
-			<div class="aui-item">
+			<div class="aui-item" id="settings">
 				<h2>Change Settings</h2>
 				<form class="aui" name="jira-csv-sender-settings-form" method="POST"
 					action="$Settings.getContextPath()/plugins/servlet/jiracsvsender/settings">
 					<input type="text" name="email" id="email" class="text"
 						required placeholder="Email" />
 					<br />
+					<br />
 					<input type="text" name="interval" id="interval" class="text"
 						required placeholder="Interval (in minutes)" />
 					<br />
-					<input class="button submit" type="submit" value="Save" />
-
+					<br />
+					<select class="aui" id="projectsList" required>
+						<option disabled>Select Project</option>
+					</select>
+					<br />
+					<br />
+					<input type="hidden" name="projectName" id="projectName"></input>
+					<input class="button submit" type="submit" value="Save"  disabled="" id="sendFormBtn"/>
 					<div class="description">Settings for Jira CSV Sender</div>
 				</form>
 			</div>

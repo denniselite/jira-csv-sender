@@ -15,7 +15,7 @@
 	<!-- add our web resources -->
 	<web-resource key="jira-csv-sender-resources" name="jira-csv-sender Web Resources">
 		<dependency>com.atlassian.auiplugin:ajs</dependency>
-
+		<dependency>com.atlassian.auiplugin:aui-select2</dependency>
 		<resource type="download" name="jira-csv-sender.css"
 			location="/css/jira-csv-sender.css" />
 		<resource type="download" name="jira-csv-sender.js" location="/js/jira-csv-sender.js" />

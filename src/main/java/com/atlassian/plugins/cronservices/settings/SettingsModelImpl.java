@@ -5,6 +5,7 @@ public class SettingsModelImpl implements SettingsModel{
 	private String email;
 	private long interval;
 	private String contextPath;
+	private String projectName;
 
 	public SettingsModelImpl(){
 		
@@ -36,6 +37,16 @@ public class SettingsModelImpl implements SettingsModel{
 
 	public void setContextPath(String contextPath) {
 		this.contextPath = contextPath;
+	}
+
+	@Override
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	@Override
+	public String getProjectName() {
+		return  this.projectName;
 	}
 
 }
