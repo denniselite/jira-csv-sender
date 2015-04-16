@@ -69,7 +69,7 @@ public class LetterServiceImpl implements LetterService{
 		jac.setLoggedInUser(appUser);
 		User user = jac.getUser().getDirectoryUser();
 		final JqlQueryBuilder builder = JqlQueryBuilder.newBuilder();
-		builder.where().project("TestProject").and().status("IN PROGRESS");
+		builder.where().project(settingsManager.getValue("projectName").toString()).and().status("IN PROGRESS");
 		Query query = builder.buildQuery();
 		try
 		{

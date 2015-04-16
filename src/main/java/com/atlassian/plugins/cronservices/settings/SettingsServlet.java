@@ -33,11 +33,20 @@ public class SettingsServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
 	{
-		outSettings.setEmail(settingsManager.getValue("email").toString());
-		outSettings.setInterval(Long.parseLong(settingsManager.getValue("interval").toString()));
-		outSettings.setContextPath(request.getContextPath());
-		context.put("Settings", outSettings);
-		templateRenderer.render("templates/Settings.vm", context, response.getWriter());
+		if ( settingsManager.getValue("EMPTY_SETTINGS") == "YES"){
+			outSettings.setContextPath(request.getContextPath());
+			context.put("SETTINGS_AVAILABLE", "NO");
+			context.put("Settings", outSettings);
+			templateRenderer.render("templates/Settings.vm", context, response.getWriter());
+		} else {
+			outSettings.setEmail(settingsManager.getValue("email").toString());
+			outSettings.setInterval(Long.parseLong(settingsManager.getValue("interval").toString()));
+			outSettings.setProjectName(settingsManager.getValue("email").toString());
+			outSettings.setContextPath(request.getContextPath());
+			context.put("SETTINGS_AVAILABLE", "YES");
+			context.put("Settings", outSettings);
+			templateRenderer.render("templates/Settings.vm", context, response.getWriter());
+		}
 	}
 	
 	@Override
@@ -45,10 +54,14 @@ public class SettingsServlet extends HttpServlet{
     {
 		settingsManager.setValue("email", req.getParameter("email"));
 		settingsManager.setValue("interval", req.getParameter("interval"));
+		settingsManager.setValue("projectName", req.getParameter("projectName"));
+		settingsManager.setValue("EMPTY_SETTINGS", "NO");
 		outSettings.setEmail(settingsManager.getValue("email").toString());
 		outSettings.setInterval(Long.parseLong(settingsManager.getValue("interval").toString()));
+		outSettings.setProjectName(settingsManager.getValue("projectName").toString());
 		outSettings.setContextPath(req.getContextPath());
 		cronService.reschedule();
+		context.put("SETTINGS_AVAILABLE", "YES"); 
 		context.put("Settings", outSettings);
 		templateRenderer.render("templates/Settings.vm", context, res.getWriter());
     }

@@ -13,7 +13,6 @@ import com.atlassian.plugins.cronservices.letter.LetterServiceImpl;
 
 public class CronServiceTask implements PluginJob{
 
-	public static final String MAIL = "mail";
 	private Email email;
 
 	private SettingsManager settingsManager;

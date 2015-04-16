@@ -10,44 +10,47 @@ import java.util.HashMap;
 
 public class CronServiceImpl implements CronService, LifecycleAware {
 
-	    static final String KEY = CronServiceImpl.class.getName() + ":instance";
-	    private static final String JOB_NAME = CronServiceImpl.class.getName() + ":job";
+	static final String KEY = CronServiceImpl.class.getName() + ":instance";
+	private static final String JOB_NAME = CronServiceImpl.class.getName() + ":job";
 
-	    private final PluginScheduler pluginScheduler;  
-		private final SettingsManager settingsManager;    
+	private final PluginScheduler pluginScheduler;  
+	private final SettingsManager settingsManager;    
 
-	    private long interval;         
-	    private Date lastRun = null;    
+	private long interval;         
+	private Date lastRun = null;    
 
-	    public CronServiceImpl(PluginScheduler pluginScheduler, PluginSettingsFactory pluginSettingsFactory) {
-	        this.pluginScheduler = pluginScheduler;
-	        this.settingsManager = new SettingsManager(pluginSettingsFactory);
-	        this.interval = Long.parseLong(settingsManager.getValue("interval").toString())*60*1000;
-	    }
+	public CronServiceImpl(PluginScheduler pluginScheduler, PluginSettingsFactory pluginSettingsFactory) {
+		this.pluginScheduler = pluginScheduler;
+		this.settingsManager = new SettingsManager(pluginSettingsFactory);
+		this.interval = 0;
+	}
 
-	    public void onStart() {
-	        reschedule();
-	    }
+	public void onStart() {
+		reschedule();
+	}
 
-	    public void reschedule() {
-	        this.interval = Long.parseLong(settingsManager.getValue("interval").toString())*60*1000L;
-	        long interval = this.interval;
-	        pluginScheduler.scheduleJob(
-	                JOB_NAME,                   // unique name of the job
-	                CronServiceTask.class,     // class of the job
-	                new HashMap<String,Object>() {{
-	                    put(KEY, CronServiceImpl.this);
-	                }},                         // data that needs to be passed to the job
-	                new Date(),                 // the time the job is to start
-	                interval);                  // interval between repeats, in milliseconds
-	        System.out.println("Issues search task scheduled to run every "+interval);
-	    }
+	public void reschedule() {
+		if ( settingsManager.getValue("EMPTY_SETTINGS") == "YES"){
+			this.interval = 60000L;
+		} else {
+			this.interval = Long.parseLong(settingsManager.getValue("interval").toString())*60*1000L;
+		}
+		pluginScheduler.scheduleJob(
+				JOB_NAME,                   // unique name of the job
+				CronServiceTask.class,     // class of the job
+				new HashMap<String,Object>() {{
+					put(KEY, CronServiceImpl.this);
+				}},                         // data that needs to be passed to the job
+				new Date(),                 // the time the job is to start
+				this.interval);                  // interval between repeats, in milliseconds
+		System.out.println("Issues search task scheduled to run every "+interval);
+	}
 
-	    /* package */ void setLastRun(Date lastRun) {
-	        this.lastRun = lastRun;
-	    }
-	    
-	    public SettingsManager getSettingsManager(){
-	    	return this.settingsManager;
-	    }
+	/* package */ void setLastRun(Date lastRun) {
+		this.lastRun = lastRun;
+	}
+
+	public SettingsManager getSettingsManager(){
+		return this.settingsManager;
+	}
 }

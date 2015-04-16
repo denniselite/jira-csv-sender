@@ -8,6 +8,7 @@
 	</head>
 	<body>
 		<div class="aui-group">
+			#if ($SETTINGS_AVAILABLE == "YES")
 			<div class="aui-item">
 				<h2>Current Settings</h2>
 				<table class="aui" id="basic">
@@ -28,11 +29,24 @@
 								$Settings.getInterval()
 							</td>
 						</tr>
+						<tr>
+							<td>
+								Project name
+							</td>
+							<td>
+								$Settings.getProjectName()
+							</td>
+						</tr>
 					</tboby>
 				</table>
 			</div>
+			#end
 			<div class="aui-item" id="settings">
+			#if ($SETTINGS_AVAILABLE == "NO")
+				<h2>Please, install Plugin Settings</h2>
+			#else
 				<h2>Change Settings</h2>
+			#end	
 				<form class="aui" name="jira-csv-sender-settings-form" method="POST"
 					action="$Settings.getContextPath()/plugins/servlet/jiracsvsender/settings">
 					<input type="text" name="email" id="email" class="text"

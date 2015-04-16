@@ -59,6 +59,16 @@
 	<component-import key="pluginSettingsFactory"
 		interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
 
+	<!-- Event publisher import -->
+	<component-import key="eventPublisher"
+		interface="com.atlassian.event.api.EventPublisher" />
+
+	<!-- Event listener -->
+	<component key="eventListener" 
+		class="com.atlassian.plugins.cronservices.jiracsvsender.Listener">
+    	<description>A Listener for plugin lifecycle events</description>
+	</component>
+
 	<!-- Webworks with actions -->
 	<webwork1 key="reference-actions" name="Reference WebWork Action"
 		class="java.lang.Object" roles-required="use">
@@ -79,34 +89,38 @@
 	</webwork1>
 
 	<!-- Menu Web Section for plugin settings -->
-	
+
 	<web-section key="jira-csv-sender-settings" name="JIra CSV Sender"
 		location="system.admin" weight="105">
 		<description key="jiracsv-settings-section-desc">Settings section for Jira CSV Sender
-			Plugin</description>
-		<label key="jiracsv-settings-section-label" />
+			Plugin
+		</description>
+		<label key="jiracsv-settings-section-label">CSV Issue Reports Sender</label>
 	</web-section>
-	
-	<!-- Link to plugin settings with servlet-->
+
+	<!-- Link to plugin settings with servlet -->
 	<web-item key="jira-csv-sender-settings-servlet-link" name="Link to SettingsServlet"
 		section="system.admin/jira-csv-sender-settings" weight="20">
 		<description key="jiracsv-desc">Static link to the servlet</description>
-		<label key="jira-csv-label" />
-		<link linkId="hello_world">/plugins/servlet/jiracsvsender/settings</link>
+		<label>CSV Issue Reports Sender</label>
+		<link linkId="jira-csv-sender-settings-servlet-link-to">/plugins/servlet/jiracsvsender/settings</link>
 	</web-item>
-	
-	<!-- Link to plugin settings with action-->
+
+	<!-- Link to plugin settings with action
 	<web-item key="jira-csv-sender-settings-action-link" name="Link to ActionSettings"
 		section="system.admin/jira-csv-sender-settings" weight="20">
-		<description key="jiracsv-desc">Static link to the action settings</description>
+		<description key="jiracsv-desc">Static link to the action settings
+		</description>
 		<label key="jira-csv-label" />
 		<link linkId="hello_world">/secure/JiraAdminWebAction!default.jspa</link>
 		<condition
 			class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" />
 	</web-item>
+	 -->
 
 	<!-- Settings HTTP Servlet -->
-	<servlet key="jira-csv-sender-settingsservlet" class="com.atlassian.plugins.cronservices.settings.SettingsServlet">
+	<servlet key="jira-csv-sender-settingsservlet"
+		class="com.atlassian.plugins.cronservices.settings.SettingsServlet">
 		<url-pattern>/jiracsvsender/settings</url-pattern>
 	</servlet>
 </atlassian-plugin>
